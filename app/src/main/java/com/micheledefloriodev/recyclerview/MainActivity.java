@@ -3,78 +3,56 @@ package com.micheledefloriodev.recyclerview;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
-    private List<ModelData> users;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerViewAdapter adapter;
+    private RecyclerView.Adapter adapter;
+    RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView=findViewById(R.id.recyclerView);
-        users=new ArrayList<>();
+        recyclerView= findViewById(R.id.my_recycler_view);
 
+        // use this setting to
+        // improve performance if you know that changes
+        // in content do not change the layout size
+        // of the RecyclerView
+        recyclerView.setHasFixedSize(true);
 
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adapter=new RecyclerViewAdapter(users,this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true); // le cardView sono tutte delle stesse dimensioni
-        setupSwipeRefresh();
+        List<String> list = new ArrayList<>();
+        for (int i = 0 ; i< 100 ; i++){
+            list.add("Test"+i);
 
-
-    }
-    /*
-    Notifica avvenuta cambiamento all interno del Recycle View( e adapter)
-
-     */
-    private void notifyOnDataChanged(){
-        users.clear();
-        users = addElement();
-        recyclerView.removeAllViews();
-        adapter = new RecyclerViewAdapter(users,this);
+        }
+        // define an adapter
+        adapter = new myAdapter(list);
         recyclerView.setAdapter(adapter);
 
-    }
-    private List<ModelData> addElement(){
-        List<ModelData> modelData= new ArrayList<>();
-        modelData.add(new ModelData("Fischl",R.drawable.fotoprofilo_genshin));
-        modelData.add(new ModelData("Ganyu",R.drawable.fotoprofilo_genshin2));
-        modelData.add(new ModelData("TizioVento",R.drawable.fotoprofilo_genshin3));
-        return modelData;
-    }
-    /*
 
-    imposta i parametri del swipe refresh
 
-     */
-    private void setupSwipeRefresh () {
-        swipeRefreshLayout=findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorScheme(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_blue_dark,
-                android.R.color.holo_blue_light,
-                android.R.color.black);
-    }
-/*
-viene richiamato al momento dello swipe
 
- */
-    @Override
-    public void onRefresh() {
-        notifyOnDataChanged();
-        swipeRefreshLayout.setRefreshing(false);
+
+
+
+
+
+
     }
+
 }
